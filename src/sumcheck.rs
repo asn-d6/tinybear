@@ -20,7 +20,7 @@ where
         for _ in 0..ark_std::log2(len) {
             self = self
                 .add_points(2, "round-message")
-                .challenge_scalars(1, "challenge");
+                .challenge_bytes(16, "challenge")
         }
         self
     }
@@ -118,7 +118,8 @@ where
         let [a, b] = merlin.next_points().unwrap();
         messages.push([a, b]);
         // compute the next challenge from the previous coefficients.
-        let [r] = merlin.challenge_scalars().unwrap();
+        let r_bytes = merlin.challenge_bytes::<16>().unwrap();
+        let r = G::Scalar::from_le_bytes_mod_order(&r_bytes);
         challenges.push(r);
     }
     let claim = reduce_with_challenges(&messages, &challenges, claim);
@@ -167,7 +168,8 @@ pub fn batch_sumcheck<G: CurveGroup, const N: usize>(
         let (A, a_opening) = pedersen::commit_hiding(arthur.rng(), ck, &[a]);
         let (B, b_opening) = pedersen::commit_hiding(arthur.rng(), ck, &[b]);
         arthur.add_points(&[A, B]).unwrap();
-        let [c] = arthur.challenge_scalars().unwrap();
+        let c_bytes = arthur.challenge_bytes::<16>().unwrap();
+        let c = G::ScalarField::from_le_bytes_mod_order(&c_bytes);
 
         claims.iter_mut().for_each(|claim| claim.fold(c));
 
@@ -202,7 +204,8 @@ pub fn sumcheck<G: CurveGroup>(
         let (B, b_opening) = pedersen::commit_hiding(arthur.rng(), ck, &[b]);
 
         arthur.add_points(&[A, B]).unwrap();
-        let [c] = arthur.challenge_scalars().unwrap();
+        let c_bytes = arthur.challenge_bytes::<16>().unwrap();
+        let c = G::ScalarField::from_le_bytes_mod_order(&c_bytes);
         fold_inplace(&mut v, c);
         fold_inplace(&mut w, c);
 

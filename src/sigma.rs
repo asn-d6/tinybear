@@ -2,6 +2,7 @@
 use std::ops::Mul;
 use std::vec;
 
+use ark_ff::PrimeField;
 use ark_ec::CurveGroup;
 use ark_serialize::CanonicalSerialize;
 use ark_std::{UniformRand, Zero};
@@ -156,7 +157,8 @@ impl<G: CurveGroup> LinProof<G> for CompressedSigma<G> {
             let B = B + ck.H.mul(B_opening);
             arthur.add_points(&[A, B])?;
 
-            let [c] = arthur.challenge_scalars().unwrap();
+            let c_bytes = arthur.challenge_bytes::<16>()?;
+            let c = G::ScalarField::from_le_bytes_mod_order(&c_bytes);
 
             sumcheck::fold_inplace(&mut x_vec_prime, c);
             sumcheck::group_fold_inplace::<G>(&mut vec_aG, c);
