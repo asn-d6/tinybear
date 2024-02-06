@@ -5,7 +5,7 @@ use rand::{CryptoRng, RngCore};
 
 use crate::pedersen::CommitmentKey;
 use crate::prover::{aes_prove, AesCipherWitness, AesKeySchWitness};
-use crate::sigma::{self, SigmaProof};
+use crate::sigma::{self, CompressedSigma};
 use crate::verifier::{aes_verify, AesCipherInstance, AeskeySchInstance};
 use crate::{aes, registry, u8msm};
 
@@ -22,7 +22,7 @@ pub fn aes128_prove<'a, G: CurveGroup>(
 ) -> ProofResult<&'a [u8]> {
     let witness =
         AesCipherWitness::<G::ScalarField, 11, 4>::new(message, key, message_opening, key_opening);
-    aes_prove::<G, SigmaProof<G>, 11>(arthur, ck, &witness)
+    aes_prove::<G, CompressedSigma<G>, 11>(arthur, ck, &witness)
 }
 
 #[inline]
@@ -33,7 +33,7 @@ pub fn aes128ks_prove<'a, G: CurveGroup>(
     key_opening: G::ScalarField,
 ) -> ProofResult<&'a [u8]> {
     let witness = AesKeySchWitness::<G::ScalarField, 11, 4>::new(&key, &key_opening);
-    aes_prove::<G, SigmaProof<G>, 11>(arthur, ck, &witness)
+    aes_prove::<G, CompressedSigma<G>, 11>(arthur, ck, &witness)
 }
 
 #[inline]
@@ -46,7 +46,7 @@ pub fn aes128_verify<G: CurveGroup>(
 ) -> ProofResult<()> {
     let instance =
         AesCipherInstance::<G, 11, 4>::new(message_commitment, round_keys_commitment, ctx);
-    aes_verify::<G, SigmaProof<G>, 11>(merlin, ck, &instance)
+    aes_verify::<G, CompressedSigma<G>, 11>(merlin, ck, &instance)
 }
 
 #[inline]
@@ -56,7 +56,7 @@ pub fn aes128ks_verify<G: CurveGroup>(
     round_keys_com: G,
 ) -> ProofResult<()> {
     let instance = AeskeySchInstance::<G, 11, 4>::new(&round_keys_com);
-    aes_verify::<G, SigmaProof<G>, 11>(merlin, ck, &instance)
+    aes_verify::<G, CompressedSigma<G>, 11>(merlin, ck, &instance)
 }
 
 #[inline]
@@ -70,7 +70,7 @@ pub fn aes256_prove<'a, G: CurveGroup>(
 ) -> ProofResult<&'a [u8]> {
     let witness =
         AesCipherWitness::<G::ScalarField, 15, 8>::new(message, key, message_opening, key_opening);
-    aes_prove::<G, SigmaProof<G>, 15>(arthur, ck, &witness)
+    aes_prove::<G, CompressedSigma<G>, 15>(arthur, ck, &witness)
 }
 
 #[inline]
@@ -81,7 +81,7 @@ pub fn aes256ks_prove<'a, G: CurveGroup>(
     key_opening: G::ScalarField,
 ) -> ProofResult<&'a [u8]> {
     let witness = AesKeySchWitness::<G::ScalarField, 15, 8>::new(&key, &key_opening);
-    aes_prove::<G, SigmaProof<G>, 15>(arthur, ck, &witness)
+    aes_prove::<G, CompressedSigma<G>, 15>(arthur, ck, &witness)
 }
 
 pub fn aes256_verify<G>(
@@ -95,7 +95,7 @@ where
     G: CurveGroup,
 {
     let instance = AesCipherInstance::<G, 15, 8>::new(m_com, rk_com, ctx);
-    aes_verify::<G, sigma::SigmaProof<G>, 15>(merlin, ck, &instance)
+    aes_verify::<G, sigma::CompressedSigma<G>, 15>(merlin, ck, &instance)
 }
 
 pub fn commit_message<G: CurveGroup, const R: usize>(

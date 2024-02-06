@@ -570,7 +570,7 @@ fn test_prove() {
         0xE7u8, 0x4A, 0x8F, 0x6D, 0xE2, 0x12, 0x7B, 0xC9, 0x34, 0xA5, 0x58, 0x91, 0xFD, 0x23, 0x69,
         0x0C,
     ];
-    let ck = pedersen::setup::<G>(arthur.rng(), 2084);
+    let ck = pedersen::setup::<G>(arthur.rng(), 4096);
 
     let proof = crate::aes128_prove::<G>(&mut arthur, &ck, message, F::zero(), &key, F::zero());
     println!("size: {}", proof.unwrap().len());

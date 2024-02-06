@@ -18,7 +18,7 @@ ark-serialize= {git = "https://github.com/arkworks-rs/algebra"}
 ark-ec = {version="0.4.2", features=["std", "parallel"]}
 ark-ff = {version="0.4.2", features=["asm", "std", "parallel"]}
 ark-serialize = "0.4.2"
-ark-std = {version="0.4.0", features=["std", "getrandom"]}
+ark-std = {version="0.4.0", features=["std", "getrandom", "print-trace"]}
 nimue = {git="https://github.com/arkworks-rs/nimue.git", features = ["ark"] }
 rand = "0.8.5"
 rand_chacha = "0.3.1"

@@ -123,6 +123,7 @@ where
             .add_sumcheck(witness_len * 2)
             .add_points(2, "lin_M_fold, lin_Q_fold")
             .challenge_scalars(1, "c_batch_eval")
-            .add_lin_proof(witness_len * 2)
+//            .add_lin_proof(witness_len * 2)
+            .add_compressed_lin_proof(witness_len * 2)
     }
 }

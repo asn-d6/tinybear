@@ -13,7 +13,7 @@ fn bench_compressed_sigma(c: &mut Criterion) {
         let rng = &mut nimue::DefaultRng::default();
 
         // Basic setup
-        let len = 1 <<12;
+        let len = (1 <<12);
         let iop = IOPattern::new("lineval bench ⏱️");
         let iop = LinProofIO::<G>::add_compressed_lin_proof(iop, len);
 

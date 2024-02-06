@@ -13,7 +13,7 @@ fn bench_aes128_prove(c: &mut Criterion) {
         let key = [0u8; 16];
         let message_opening = F::rand(rng);
         let key_opening = F::rand(rng);
-        let ck = pedersen::setup::<G>(&mut rand::thread_rng(), 2048);
+        let ck = pedersen::setup::<G>(&mut rand::thread_rng(), 4196);
         let iop = IOPattern::new("benchmark-tinybear-aes128");
         let iop = TinybearIO::<G>::add_aes128_proof(iop);
         b.iter(|| {
@@ -39,7 +39,7 @@ fn bench_aes256_prove(c: &mut Criterion) {
         let key = [0u8; 32];
         let message_opening = F::rand(rng);
         let key_opening = F::rand(rng);
-        let ck = pedersen::setup::<G>(&mut rand::thread_rng(), 2048);
+        let ck = pedersen::setup::<G>(&mut rand::thread_rng(), 4096);
         let iop = IOPattern::new("benchmark-tinybear-aes256");
         let iop = TinybearIO::<G>::add_aes256_proof(iop);
         b.iter(|| {
